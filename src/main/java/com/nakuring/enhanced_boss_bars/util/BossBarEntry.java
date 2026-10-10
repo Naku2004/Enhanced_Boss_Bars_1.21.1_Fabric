@@ -11,5 +11,4 @@ public record BossBarEntry(
     public boolean isEnabled() {
         return ConfigManager.barConfig(key).enabled;
     }
-
 }

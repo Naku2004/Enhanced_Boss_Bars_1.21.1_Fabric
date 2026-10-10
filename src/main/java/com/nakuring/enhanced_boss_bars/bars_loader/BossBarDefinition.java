@@ -5,6 +5,7 @@ import net.minecraft.util.Identifier;
 
 public class BossBarDefinition {
 
+    public String author;
     public String key;
     public BossBarKey.Type type;
 

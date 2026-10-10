@@ -3,6 +3,7 @@ package com.nakuring.enhanced_boss_bars.util;
 import net.minecraft.util.Identifier;
 
 public record BossBarData(
+        String author,
         String mod_id,
 
         Identifier health_background,

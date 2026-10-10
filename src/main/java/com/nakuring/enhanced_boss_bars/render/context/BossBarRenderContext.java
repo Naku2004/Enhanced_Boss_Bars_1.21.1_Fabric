@@ -109,14 +109,6 @@ public class BossBarRenderContext {
         return config;
     }
 
-    public int screenWidth() {
-        return screen_width;
-    }
-
-    public int screenHeight() {
-        return screen_height;
-    }
-
     public int x() {
         return anchor_x;
     }

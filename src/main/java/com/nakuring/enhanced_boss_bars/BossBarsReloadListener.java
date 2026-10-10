@@ -9,7 +9,8 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BossBarsReloadListener implements  SimpleSynchronousResourceReloadListener {
+public class BossBarsReloadListener
+        implements  SimpleSynchronousResourceReloadListener {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger("Enhanced Boss Bars");
@@ -20,10 +21,18 @@ public class BossBarsReloadListener implements  SimpleSynchronousResourceReloadL
     }
 
     @Override
-    public void reload(ResourceManager manager) {
+    public void reload(
+            ResourceManager manager
+    ) {
+
         LOGGER.info("BossBarsReloadListener reloading...");
+
         BossBarsManager.clear();
-        BossBarsLoader.load(manager, new FabricPlatform());
+
+        BossBarsLoader.load(
+                manager,
+                new FabricPlatform()
+        );
     }
 
 }
