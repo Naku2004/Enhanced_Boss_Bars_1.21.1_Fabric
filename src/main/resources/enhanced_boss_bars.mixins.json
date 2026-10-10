@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "com.nakuring.enhanced_boss_bars.mixin",
+	"compatibilityLevel": "JAVA_21",
+    "mixins": [
+      "BossBarRenderMixin",
+      "ClothConfigScreenMixin"
+    ],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
