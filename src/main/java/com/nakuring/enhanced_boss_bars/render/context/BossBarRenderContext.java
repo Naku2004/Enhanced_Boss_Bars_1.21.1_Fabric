@@ -16,6 +16,7 @@ public class BossBarRenderContext {
 
     private final int anchor_y;
     private int current_y;
+    private final int position_x;
     private int anchor_x;
 
     private int reference_width;
@@ -29,7 +30,8 @@ public class BossBarRenderContext {
         this.screen_width = screen_width;
         this.screen_height = screen_height;
 
-        this.anchor_x = (int) (screen_width * (config.position_x / 100.0));
+        //this.anchor_x = (int) (screen_width * (config.position_x / 100.0));
+        this.position_x = config.position_x;
         this.anchor_y = (int) (screen_height * (config.position_y / 100.0));
     }
 
@@ -55,6 +57,7 @@ public class BossBarRenderContext {
             current_y = Math.max(total_height, Math.min(anchor_y, screen_height));
         }
 
+        /*
         switch (config.horizontal_alignment) {
 
             case Left ->
@@ -78,6 +81,31 @@ public class BossBarRenderContext {
                             screen_width
                     );
         }
+        */
+
+        int min_x;
+        int max_x;
+
+        switch (config.horizontal_alignment) {
+            case Left -> {
+                min_x = 0;
+                max_x = screen_width - reference_width;
+            }
+            case Center -> {
+                min_x = reference_width / 2;
+                max_x = screen_width - reference_width / 2;
+            }
+            case Right -> {
+                min_x = reference_width;
+                max_x = screen_width;
+            }
+            default -> throw new IllegalStateException(
+                    "Unknown horizontal alignment: " + config.horizontal_alignment
+            );
+        }
+
+        int percent = Math.clamp(position_x, 0, 100);
+        anchor_x = min_x + (int) Math.round((max_x - min_x) * (percent / 100.0));
     }
 
     public void advance(BossBarEntry entry) {
