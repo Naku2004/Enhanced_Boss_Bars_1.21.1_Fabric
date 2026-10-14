@@ -26,4 +26,10 @@ public interface BossBarGraphics {
             boolean shadow
     );
 
+    void pushScale(float scale, float centerX, float centerY);
+
+    void popScale();
+
+    float effectiveScale(int scale);
+
 }

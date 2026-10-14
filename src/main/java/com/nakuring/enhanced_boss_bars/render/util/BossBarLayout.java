@@ -46,8 +46,8 @@ public record BossBarLayout(
                     context.x() - boss_bar.overlay_width() / 2;
         };
 
-        int health_x = x - boss_bar.health_width() / 2;
-        int health_y = y + boss_bar.health_y();
+        int health_x = x - boss_bar.health_bar_width() / 2;
+        int health_y = y + boss_bar.health_offset_y();
 
         int overlay_x = x - boss_bar.overlay_width() / 2 + boss_bar.overlay_offset_x();
         int overlay_y = y;

@@ -29,9 +29,14 @@ public abstract class ClothConfigScreenMixin {
             return;
         }
 
+        context.draw();
+        context.getMatrices().push();
+        context.getMatrices().translate(0.0, 0.0, 1000.0);
         graphics.begin(context);
-
         BossBarPreviewRenderer.render(graphics);
+        context.draw();
+        context.getMatrices().pop();
+
     }
 
 }

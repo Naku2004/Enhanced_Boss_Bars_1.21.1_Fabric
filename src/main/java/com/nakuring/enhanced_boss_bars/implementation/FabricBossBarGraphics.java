@@ -68,4 +68,23 @@ public class FabricBossBarGraphics implements BossBarGraphics {
     public void begin(DrawContext context) {
         this.context = context;
     }
+
+    @Override
+    public void pushScale(float scale, float centerX, float centerY) {
+        var matrices = context.getMatrices();
+        matrices.push();
+        matrices.translate(centerX, centerY, 0.0);
+        matrices.scale(scale, scale, 1.0f);
+        matrices.translate(-centerX, -centerY, 0.0);
+    }
+
+    @Override
+    public void popScale() {
+        context.getMatrices().pop();
+    }
+
+    @Override
+    public float effectiveScale(int scale) {
+        return scale / (float) client.getWindow().getScaleFactor();
+    }
 }

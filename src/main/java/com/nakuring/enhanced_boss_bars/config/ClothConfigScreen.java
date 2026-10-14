@@ -25,6 +25,7 @@ public class ClothConfigScreen {
     public static IntegerSliderEntry vertical_position_entry;
     public static EnumListEntry horizontal_alignment_entry;
     public static EnumListEntry vertical_direction_entry;
+    public static IntegerSliderEntry scale_entry;
     public static BooleanListEntry bar_preview_entry;
     public static IntegerSliderEntry max_boss_bars_entry;
     public static BooleanListEntry max_boss_bars_preview_entry;
@@ -90,6 +91,17 @@ public class ClothConfigScreen {
                 .setSaveConsumer(value -> general_config.vertical_direction = value)
                 .build();
 
+        scale_entry = entryBuilder
+                .startIntSlider(
+                        Text.literal("Boss bar scale"),
+                        general_config.scale,
+                        1,
+                        4
+                )
+                .setDefaultValue(3)
+                .setSaveConsumer(value -> general_config.scale = value)
+                .build();
+
         max_boss_bars_entry = entryBuilder
                 .startIntSlider(
                         Text.literal("Maximum visible boss bars at the same time"),
@@ -134,8 +146,9 @@ public class ClothConfigScreen {
 
         SubCategoryListEntry boss_bars = entryBuilder
                 .startSubCategory(
-                        Text.literal("Boss Bars"),
+                        Text.literal("Boss bars"),
                         List.of(
+                                scale_entry,
                                 max_boss_bars_entry
                         )
                 )

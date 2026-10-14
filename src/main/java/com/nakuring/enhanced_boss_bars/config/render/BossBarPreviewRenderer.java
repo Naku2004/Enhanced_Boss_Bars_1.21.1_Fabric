@@ -44,6 +44,9 @@ public class BossBarPreviewRenderer {
 
         GeneralConfig config = new GeneralConfig();
 
+        config.scale =
+                ClothConfigScreen.scale_entry.getValue();
+
         config.position_x =
                 ClothConfigScreen.horizontal_position_entry.getValue();
 
@@ -69,10 +72,17 @@ public class BossBarPreviewRenderer {
                 new BossBarRenderContext(
                         config,
                         graphics.screenWidth(),
-                        graphics.screenHeight()
+                        graphics.screenHeight(),
+                        graphics.effectiveScale(config.scale)
                 );
 
         context.prepare(bars);
+
+        graphics.pushScale(
+                graphics.effectiveScale(config.scale),
+                context.x(),
+                context.y()
+        );
 
         for (PreparedBossBar prepared : bars) {
 
@@ -86,17 +96,16 @@ public class BossBarPreviewRenderer {
                             prepared.entry().generic()
                     );
 
-
             graphics.drawTexture(
                     data.health_color(),
                     layout.health_x(),
                     layout.health_y(),
                     0,
                     0,
-                    data.health_width(),
-                    data.health_height(),
-                    data.health_width(),
-                    data.health_height()
+                    data.health_bar_width(),
+                    data.health_bar_height(),
+                    data.health_bar_width(),
+                    data.health_bar_height()
             );
 
 
@@ -114,5 +123,7 @@ public class BossBarPreviewRenderer {
 
             context.advance(prepared.entry());
         }
+
+        graphics.popScale();
     }
 }
