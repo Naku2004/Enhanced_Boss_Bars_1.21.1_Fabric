@@ -11,7 +11,6 @@ import java.util.*;
 
 import static com.nakuring.enhanced_boss_bars.EnhancedBossBars.getModName;
 
-
 public class BossBarsManager {
 
     private static final Map<BossBarKey, List<BossBarData>> boss_bar_definitions = new LinkedHashMap<>();
@@ -30,13 +29,6 @@ public class BossBarsManager {
         );
 
         definitions.add(data);
-
-        // Preserve the existing behavior until author selection is added: the last resource wins.
-        //boss_bars.put(key, data);
-    }
-
-    public static List<BossBarData> getBossBarDefinitions(BossBarKey key) {
-        return List.copyOf(boss_bar_definitions.getOrDefault(key, List.of()));
     }
 
     public static Map<BossBarKey, List<BossBarData>> getAllBossBarDefinitions() {
@@ -74,10 +66,6 @@ public class BossBarsManager {
         return null;
     }
 
-    public static Map<BossBarKey, BossBarData> getBossBars(){
-        return boss_bars;
-    }
-
     public static void clear(){
         boss_bar_definitions.clear();
         boss_bars.clear();
@@ -102,10 +90,35 @@ public class BossBarsManager {
                     .findFirst()
                     .orElse(definitions.getFirst());
 
-            // Mantiene la preferencia si existe; si quedó obsoleta, la corrige.
             config.selected_author = selected.author();
             boss_bars.put(key, selected);
         });
+    }
+
+    public static boolean migrateTranslatedConfigKeys() {
+        Map<String, BossBarConfig> configs = ConfigManager.config().boss_bars;
+        boolean migrated = false;
+
+        for (BossBarKey key : boss_bar_definitions.keySet()) {
+            if (key.type() != BossBarKey.Type.translation) {
+                continue;
+            }
+
+            String newId = key.value();
+            String oldId = Text.translatable(newId).getString();
+
+            if (newId.equals(oldId) || configs.containsKey(newId)) {
+                continue;
+            }
+
+            BossBarConfig oldConfig = configs.remove(oldId);
+            if (oldConfig != null) {
+                configs.put(newId, oldConfig);
+                migrated = true;
+            }
+        }
+
+        return migrated;
     }
 
     public static void sortBossBarDefinitions() {
@@ -116,18 +129,15 @@ public class BossBarsManager {
             String modA = a.getValue().getFirst().mod_id();
             String modB = b.getValue().getFirst().mod_id();
 
-            // Minecraft siempre primero
             if (modA.equals("minecraft")) return -1;
             if (modB.equals("minecraft")) return 1;
 
-            // Luego ordenar mods por su nombre visible
             int modCompare = getModName(modA).compareToIgnoreCase(getModName(modB));
 
             if (modCompare != 0) {
                 return modCompare;
             }
 
-            // Dentro del mod, ordenar bosses por nombre traducido
             String bossA = Text.translatable(a.getKey().value()).getString();
             String bossB = Text.translatable(b.getKey().value()).getString();
 
@@ -140,40 +150,4 @@ public class BossBarsManager {
             boss_bar_definitions.put(entry.getKey(), entry.getValue());
         }
     }
-
-    /*
-    public static void sortBossBars() {
-
-        List<Map.Entry<BossBarKey, BossBarData>> entries = new ArrayList<>(boss_bars.entrySet());
-
-        entries.sort((a, b) -> {
-
-            String modA = a.getValue().mod_id();
-            String modB = b.getValue().mod_id();
-
-            // Minecraft siempre primero
-            if (modA.equals("minecraft")) return -1;
-            if (modB.equals("minecraft")) return 1;
-
-            // Luego ordenar mods alfabéticamente
-            int modCompare = getModName(modA).compareToIgnoreCase(getModName(modB));
-
-            if (modCompare != 0) {
-                return modCompare;
-            }
-
-            // Si pertenecen al mismo mod, ordenar bosses
-            String bossA = Component.translatable(a.getKey().value()).getString();
-            String bossB = Component.translatable(b.getKey().value()).getString();
-
-            return bossA.compareToIgnoreCase(bossB);
-        });
-
-        boss_bars.clear();
-
-        for (Map.Entry<BossBarKey, BossBarData> entry : entries) {
-            boss_bars.put(entry.getKey(), entry.getValue());
-        }
-    }
-    */
 }

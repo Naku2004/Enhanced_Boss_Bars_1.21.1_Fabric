@@ -31,11 +31,16 @@ public class BossBarRender {
 
         BossBarData boss_bar = entry.data();
 
-        drawHealth(bridge, boss_bar, layout, textures, percent);
-        drawOverlay(bridge, boss_bar, layout, textures);
+        if (boss_bar.health_bar_before_overlay()){
+            drawHealth(bridge, boss_bar, layout, textures, percent);
+            drawOverlay(bridge, layout, textures);
+        }
+        else{
+            drawOverlay(bridge, layout, textures);
+            drawHealth(bridge, boss_bar, layout, textures, percent);
+        }
 
         if (entry.generic()) drawName(bridge, entry, layout, name);
-
     }
 
     private void drawHealth(BossBarGraphics bridge, BossBarData boss_bar, BossBarLayout layout, BossBarTextures textures, float percent) {
@@ -43,38 +48,38 @@ public class BossBarRender {
                 textures.background(),
                 layout.health_x(),
                 layout.health_y(),
-                boss_bar.health_background_texture_coord_x(),
-                boss_bar.health_background_texture_coord_y(),
+                textures.health_background_texture_coord_x(),
+                textures.health_background_texture_coord_y(),
                 boss_bar.health_bar_width(),
                 boss_bar.health_bar_height(),
-                boss_bar.health_background_texture_width(),
-                boss_bar.health_background_texture_height()
+                textures.health_background_texture_width(),
+                textures.health_background_texture_height()
         );
 
         bridge.drawTexture(
                 textures.progress(),
                 layout.health_x(),
                 layout.health_y(),
-                boss_bar.health_color_texture_coord_x(),
-                boss_bar.health_color_texture_coord_y(),
+                textures.health_color_texture_coord_x(),
+                textures.health_color_texture_coord_y(),
                 (int) (boss_bar.health_bar_width() * percent),
                 boss_bar.health_bar_height(),
-                boss_bar.health_color_texture_width(),
-                boss_bar.health_background_texture_height()
+                textures.health_color_texture_width(),
+                textures.health_color_texture_height()
         );
     }
 
-    private void drawOverlay(BossBarGraphics bridge, BossBarData boss_bar, BossBarLayout layout, BossBarTextures textures) {
+    private void drawOverlay(BossBarGraphics bridge, BossBarLayout layout, BossBarTextures textures) {
         bridge.drawTexture(
                 textures.overlay(),
                 layout.overlay_x(),
                 layout.overlay_y(),
-                boss_bar.overlay_texture_coord_x(),
-                boss_bar.overlay_texture_coord_y(),
-                boss_bar.overlay_width(),
-                boss_bar.overlay_height(),
-                boss_bar.overlay_texture_width(),
-                boss_bar.overlay_texture_height()
+                textures.overlay_texture_coord_x(),
+                textures.overlay_texture_coord_y(),
+                textures.overlay_width(),
+                textures.overlay_height(),
+                textures.overlay_texture_width(),
+                textures.overlay_texture_height()
         );
     }
 

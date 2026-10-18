@@ -42,6 +42,11 @@ public class BossBarDefinition {
     public Identifier second_phase_health_color_texture = null;
     public Identifier second_phase_overlay_texture = null;
 
+    public Integer second_phase_overlay_width;
+    public Integer second_phase_overlay_height;
+    public Integer second_phase_overlay_offset_x;
+    public Integer second_phase_overlay_offset_y;
+
     public Integer second_phase_health_background_texture_width;
     public Integer second_phase_health_background_texture_height;
     public Integer second_phase_health_color_texture_width;
@@ -57,4 +62,6 @@ public class BossBarDefinition {
     public int second_phase_overlay_texture_coord_y = 0;
 
     public double threshold_phase = 0.0;
+
+    public boolean health_bar_before_overlay = true;
 }

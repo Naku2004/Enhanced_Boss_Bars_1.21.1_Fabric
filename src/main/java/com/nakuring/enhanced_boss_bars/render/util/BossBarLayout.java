@@ -1,7 +1,7 @@
 package com.nakuring.enhanced_boss_bars.render.util;
 
 import com.nakuring.enhanced_boss_bars.config.util.GeneralConfig;
-import com.nakuring.enhanced_boss_bars.render.context.BossBarRenderContext;
+import com.nakuring.enhanced_boss_bars.render.context.BossBarStackLayout;
 import com.nakuring.enhanced_boss_bars.util.BossBarData;
 
 public record BossBarLayout(
@@ -19,38 +19,36 @@ public record BossBarLayout(
 ) {
 
     public static BossBarLayout calculateCoords(
-            BossBarRenderContext context,
+            BossBarStackLayout stack_layout,
             BossBarData boss_bar,
+            BossBarTextures textures,
             int name_width,
             boolean generic
     ) {
-        GeneralConfig config = context.config();
+        GeneralConfig config = stack_layout.getConfig();
 
-        int y = context.y();
+        int y = stack_layout.getCurrentBarY();
 
-        if (!context.directionIsDown()){
-            y -= (boss_bar.overlay_height() + (generic ? 5 : 0));
+        if (!stack_layout.isDirectionDown()){
+            y -= (textures.overlay_height() + (generic ? 5 : 0));
         }
 
         if (generic) y += 5;
 
         int x = switch (config.horizontal_alignment) {
 
-            case Left ->
-                    context.x() + boss_bar.overlay_width() / 2;
+            case Left -> stack_layout.getAnchorX() + textures.overlay_width() / 2;
 
-            case Center ->
-                    context.x();
+            case Center -> stack_layout.getAnchorX();
 
-            case Right ->
-                    context.x() - boss_bar.overlay_width() / 2;
+            case Right -> stack_layout.getAnchorX() - textures.overlay_width() / 2;
         };
 
-        int health_x = x - boss_bar.health_bar_width() / 2;
+        int health_x = x - boss_bar.health_bar_width() / 2 + boss_bar.health_offset_x();
         int health_y = y + boss_bar.health_offset_y();
 
-        int overlay_x = x - boss_bar.overlay_width() / 2 + boss_bar.overlay_offset_x();
-        int overlay_y = y;
+        int overlay_x = x - textures.overlay_width() / 2 + textures.overlay_offset_x();
+        int overlay_y = y + textures.overlay_offset_y();
 
         int name_x = x - name_width / 2;
         int name_y = y - 4;

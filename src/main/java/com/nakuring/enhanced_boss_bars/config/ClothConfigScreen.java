@@ -21,6 +21,7 @@ import static com.nakuring.enhanced_boss_bars.EnhancedBossBars.getModName;
 public class ClothConfigScreen {
 
     private static me.shedaniel.clothconfig2.gui.ClothConfigScreen current_screen;
+    public static BooleanListEntry enhanced_boss_bars_enabled_entry;
     public static IntegerSliderEntry horizontal_position_entry;
     public static IntegerSliderEntry vertical_position_entry;
     public static EnumListEntry horizontal_alignment_entry;
@@ -47,6 +48,15 @@ public class ClothConfigScreen {
         ConfigCategory general = builder.getOrCreateCategory(
                 Text.literal("General")
         );
+
+        enhanced_boss_bars_enabled_entry = entryBuilder
+                .startBooleanToggle(
+                        Text.literal("Enhanced boss bars enabled"),
+                        general_config.enhanced_boss_bars_enabled
+                )
+                .setDefaultValue(true)
+                .setSaveConsumer(value -> general_config.enhanced_boss_bars_enabled = value)
+                .build();
 
         horizontal_position_entry = entryBuilder
                 .startIntSlider(
@@ -141,8 +151,8 @@ public class ClothConfigScreen {
                                 vertical_direction_entry
                         )
                 )
+                .setExpanded(true)
                 .build();
-
 
         SubCategoryListEntry boss_bars = entryBuilder
                 .startSubCategory(
@@ -152,8 +162,8 @@ public class ClothConfigScreen {
                                 max_boss_bars_entry
                         )
                 )
+                .setExpanded(true)
                 .build();
-
 
         SubCategoryListEntry preview = entryBuilder
                 .startSubCategory(
@@ -163,14 +173,15 @@ public class ClothConfigScreen {
                                 max_boss_bars_preview_entry
                         )
                 )
+                .setExpanded(true)
                 .build();
 
+        general.addEntry(enhanced_boss_bars_enabled_entry);
         general.addEntry(position);
         general.addEntry(boss_bars);
         general.addEntry(preview);
 
         Map<String, ConfigCategory> categories = new LinkedHashMap<>();
-
 
         BossBarsManager.getAllBossBarDefinitions()
                 .forEach((key, definitions) -> {
@@ -220,6 +231,7 @@ public class ClothConfigScreen {
                                                 Text.translatable(boss_name_key),
                                                 List.of(enabled_entry, author_entry)
                                         )
+                                        .setExpanded(true)
                                         .build()
                         );
                     } else {
@@ -228,36 +240,11 @@ public class ClothConfigScreen {
                                                 Text.translatable(boss_name_key),
                                                 List.of(enabled_entry)
                                         )
+                                        .setExpanded(true)
                                         .build()
                         );
                     }
                 });
-
-        /*
-        BossBarsManager.getBossBars()
-                .forEach((key, boss_bar) -> {
-                    BossBarConfig bar_config = ConfigManager.barConfig(key);
-                    String mod_id = boss_bar.mod_id();
-                    String mod_name = getModName(mod_id);
-                    String boss_name_key = key.value();
-
-                    ConfigCategory category = categories.computeIfAbsent(
-                            mod_id,
-                            modId -> builder.getOrCreateCategory(
-                                    Text.literal(mod_name)
-                            )
-                    );
-
-                    category.addEntry(
-                            entryBuilder.startBooleanToggle(
-                                        Text.translatable(boss_name_key), bar_config.enabled
-                                    )
-                                    .setDefaultValue(true)
-                                    .setSaveConsumer(value -> bar_config.enabled = value)
-                                    .build()
-                    );
-                });
-        */
 
         builder.setSavingRunnable(() -> {
             BossBarsManager.applyAuthorSelections();

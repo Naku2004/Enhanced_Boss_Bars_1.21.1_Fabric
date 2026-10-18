@@ -6,9 +6,9 @@ public record BossBarData(
         String author,
         String mod_id,
 
-        Identifier health_background,
-        Identifier health_color,
-        Identifier overlay,
+        Identifier health_background_texture,
+        Identifier health_color_texture,
+        Identifier overlay_texture,
 
         int health_bar_width,
         int health_bar_height,
@@ -38,6 +38,11 @@ public record BossBarData(
         Identifier second_phase_health_color_texture,
         Identifier second_phase_overlay_texture,
 
+        int second_phase_overlay_width,
+        int second_phase_overlay_height,
+        int second_phase_overlay_offset_x,
+        int second_phase_overlay_offset_y,
+
         int second_phase_health_background_texture_width,
         int second_phase_health_background_texture_height,
         int second_phase_health_color_texture_width,
@@ -52,7 +57,9 @@ public record BossBarData(
         int second_phase_overlay_texture_coord_x,
         int second_phase_overlay_texture_coord_y,
 
-        double threshold_phase
+        double threshold_phase,
+
+        boolean health_bar_before_overlay
 ) {
 
     public boolean hasSecondPhase() {

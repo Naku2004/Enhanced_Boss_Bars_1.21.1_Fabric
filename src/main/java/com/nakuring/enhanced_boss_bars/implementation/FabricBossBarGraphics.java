@@ -40,6 +40,8 @@ public class FabricBossBarGraphics implements BossBarGraphics {
             int width, int height,
             int textureWidth, int textureHeight
     ) {
+        if (texture == null) return;
+
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
